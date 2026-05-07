@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: index.php');
         exit;
     } else {
-        $error = 'Usuário ou senha inválidos.';
+        $error = 'UsuÃ¡rio ou senha invÃ¡lidos.';
     }
 }
 ?>
@@ -27,19 +27,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Gestão de Frota</title>
+    <title>Login - GestÃ£o de Frota</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Manrope', sans-serif; }
-    </style>
+    <link rel="stylesheet" href="assets/css/login.css">
 </head>
 
-<body class="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_top,_#dff6e6_0%,_#f7fbf8_38%,_#123120_100%)] p-6">
+<body
+    class="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_top,_#dff6e6_0%,_#f7fbf8_38%,_#123120_100%)] p-6">
     <div class="bg-white/95 backdrop-blur p-8 rounded-[28px] shadow-2xl w-full max-w-md border border-emerald-100">
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-24 h-24 bg-emerald-50 rounded-[24px] mb-4 p-4 shadow-lg shadow-emerald-100">
+            <div
+                class="inline-flex items-center justify-center w-24 h-24 bg-emerald-50 rounded-[24px] mb-4 p-4 shadow-lg shadow-emerald-100">
                 <img src="../img/logo_cooperante.png" alt="Cooperante" class="max-h-full max-w-full object-contain">
             </div>
             <h1 class="text-2xl font-bold text-gray-800">Acesse sua conta</h1>

@@ -4,6 +4,8 @@ require_once '../includes/auth.php';
 requireLogin();
 
 $pageTitle = 'Relatório Geral de Custos';
+$pageStyles = ['assets/css/reports.css'];
+$pageScripts = ['assets/js/reports.js'];
 
 // Get costs grouped by vehicle
 $stmt = $pdo->query("
@@ -47,8 +49,9 @@ include '../includes/header.php';
             <p class="text-xl font-bold">R$ <?php echo number_format($totalFixed + $totalFuel, 2, ',', '.'); ?></p>
         </div>
     </div>
-    
-    <button onclick="window.print()" class="bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-900 transition-colors">
+
+    <button type="button" data-print-report
+        class="bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-900 transition-colors">
         <i class="fa-solid fa-print"></i> Imprimir / PDF
     </button>
 </div>
@@ -70,22 +73,32 @@ include '../includes/header.php';
                 </tr>
             </thead>
             <tbody class="divide-y">
-                <?php foreach ($reportData as $row): 
+                <?php foreach ($reportData as $row):
                     $impact = ($totalFixed + $totalFuel > 0) ? ($row['grand_total'] / ($totalFixed + $totalFuel)) * 100 : 0;
-                ?>
+                    ?>
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4">
                             <div class="font-medium text-gray-900"><?php echo $row['plate']; ?></div>
-                            <div class="text-xs text-gray-500"><?php echo $row['model']; ?> | <?php echo $row['unit_code']; ?></div>
+                            <div class="text-xs text-gray-500"><?php echo $row['model']; ?> |
+                                <?php echo $row['unit_code']; ?>
+                            </div>
                         </td>
-                        <td class="px-6 py-4 text-right text-sm text-gray-600">R$ <?php echo number_format($row['total_fixed_cost'], 2, ',', '.'); ?></td>
-                        <td class="px-6 py-4 text-right text-sm text-gray-600">R$ <?php echo number_format($row['total_fuel_cost'], 2, ',', '.'); ?></td>
-                        <td class="px-6 py-4 text-right font-bold text-gray-900">R$ <?php echo number_format($row['grand_total'], 2, ',', '.'); ?></td>
+                        <td class="px-6 py-4 text-right text-sm text-gray-600">R$
+                            <?php echo number_format($row['total_fixed_cost'], 2, ',', '.'); ?>
+                        </td>
+                        <td class="px-6 py-4 text-right text-sm text-gray-600">R$
+                            <?php echo number_format($row['total_fuel_cost'], 2, ',', '.'); ?>
+                        </td>
+                        <td class="px-6 py-4 text-right font-bold text-gray-900">R$
+                            <?php echo number_format($row['grand_total'], 2, ',', '.'); ?>
+                        </td>
                         <td class="px-6 py-4">
                             <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="bg-blue-600 h-2 rounded-full" style="width: <?php echo min(100, $impact); ?>%"></div>
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: <?php echo min(100, $impact); ?>%">
+                                </div>
                             </div>
-                            <p class="text-[10px] text-center mt-1 text-gray-500"><?php echo number_format($impact, 1); ?>% do total</p>
+                            <p class="text-[10px] text-center mt-1 text-gray-500"><?php echo number_format($impact, 1); ?>%
+                                do total</p>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -93,14 +106,5 @@ include '../includes/header.php';
         </table>
     </div>
 </div>
-
-<style>
-@media print {
-    aside, header, button { display: none !important; }
-    main { padding: 0 !important; }
-    .print\:border-0 { border: 0 !important; }
-    .print\:shadow-none { shadow: none !important; }
-}
-</style>
 
 <?php include '../includes/footer.php'; ?>

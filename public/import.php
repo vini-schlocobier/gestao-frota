@@ -4,12 +4,13 @@ require_once '../includes/auth.php';
 requireLogin();
 
 $pageTitle = 'Importar Dados';
+$pageScripts = ['assets/js/import.js'];
 $error = '';
 $success = '';
 
 $importTabs = [
     'vehicles' => [
-        'label' => 'Veículos',
+        'label' => 'Veí­culos',
         'icon' => 'fa-car',
         'title' => 'Importação de Veículos (CSV)',
         'description' => 'Importe ou atualize veículos em massa.',
@@ -235,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
             $success = $imported . ' registros importados com sucesso em ' . $importTabs[$tab]['label'] . '!';
         } catch (Exception $e) {
             $pdo->rollBack();
-            $error = 'Erro na importação: ' . $e->getMessage();
+            $error = 'Erro na importaÃ§Ã£o: ' . $e->getMessage();
         }
 
         fclose($handle);
@@ -247,66 +248,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
 include '../includes/header.php';
 ?>
 
-<div class="max-w-6xl mx-auto space-y-6">
+<div class="mx-auto max-w-6xl space-y-6">
     <div class="overflow-x-auto">
         <div class="inline-flex min-w-full gap-2 rounded-2xl bg-white/90 p-2 shadow-sm ring-1 ring-emerald-100">
             <?php foreach ($importTabs as $tabKey => $tab): ?>
                 <?php $isActive = $activeTab === $tabKey; ?>
-                <a
-                    href="import.php?tab=<?php echo $tabKey; ?>"
-                    class="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-colors whitespace-nowrap <?php echo $isActive ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-100' : 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-700'; ?>"
-                >
-                    <i class="fa-solid <?php echo $tab['icon']; ?>"></i>
-                    <?php echo $tab['label']; ?>
+                <a href="import.php?tab=<?php echo $tabKey; ?>"
+                    class="whitespace-nowrap rounded-xl px-4 py-3 text-sm font-semibold transition-colors <?php echo $isActive ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-100' : 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-700'; ?>">
+                    <i class="fa-solid <?php echo $tab['icon']; ?> mr-2"></i><?php echo $tab['label']; ?>
                 </a>
             <?php endforeach; ?>
         </div>
     </div>
 
-    <div class="bg-white border rounded-xl shadow-sm overflow-hidden">
-        <div class="p-6 border-b bg-gray-50">
+    <div class="overflow-hidden rounded-xl border bg-white shadow-sm">
+        <div class="border-b bg-gray-50 p-6">
             <h3 class="font-bold text-gray-800"><?php echo $importTabs[$activeTab]['title']; ?></h3>
-            <p class="text-sm text-gray-500 mt-1"><?php echo $importTabs[$activeTab]['description']; ?></p>
+            <p class="mt-1 text-sm text-gray-500"><?php echo $importTabs[$activeTab]['description']; ?></p>
         </div>
 
-        <div class="p-8">
+        <div class="p-4 sm:p-6 lg:p-8">
             <?php if ($error): ?>
-                <div class="mb-6 p-4 bg-red-50 text-red-700 rounded-lg flex items-center gap-2 border border-red-100">
+                <div class="mb-6 flex items-center gap-2 rounded-lg border border-red-100 bg-red-50 p-4 text-red-700">
                     <i class="fa-solid fa-circle-exclamation"></i> <?php echo $error; ?>
                 </div>
             <?php endif; ?>
 
             <?php if ($success): ?>
-                <div class="mb-6 p-4 bg-green-50 text-green-700 rounded-lg flex items-center gap-2 border border-green-100">
+                <div class="mb-6 flex items-center gap-2 rounded-lg border border-green-100 bg-green-50 p-4 text-green-700">
                     <i class="fa-solid fa-circle-check"></i> <?php echo $success; ?>
                 </div>
             <?php endif; ?>
 
-            <div class="mb-8 p-4 bg-blue-50 border border-blue-100 rounded-lg">
-                <h4 class="text-blue-800 font-bold text-sm mb-2 flex items-center gap-2">
+            <div class="mb-8 rounded-lg border border-blue-100 bg-blue-50 p-4">
+                <h4 class="mb-2 flex items-center gap-2 text-sm font-bold text-blue-800">
                     <i class="fa-solid fa-circle-info"></i> Instruções
                 </h4>
-                <ul class="text-sm text-blue-700 space-y-1 list-disc ml-5">
+                <ul class="ml-5 list-disc space-y-1 text-sm text-blue-700">
                     <li>O arquivo deve estar no formato <strong>CSV</strong>, separado por ponto e vírgula `;`.</li>
                     <li>A primeira linha deve conter o cabeçalho.</li>
-                    <li>As colunas devem seguir exatamente esta ordem: <?php echo implode('; ', $importTabs[$activeTab]['columns']); ?>.</li>
+                    <li>As colunas devem seguir exatamente esta ordem:
+                        <?php echo implode('; ', $importTabs[$activeTab]['columns']); ?>.
+                    </li>
                 </ul>
-                <a href="import.php?tab=<?php echo $activeTab; ?>&template=csv" class="inline-block mt-4 text-sm font-bold text-blue-600 hover:underline">
+                <a href="import.php?tab=<?php echo $activeTab; ?>&template=csv"
+                    class="mt-4 inline-block text-sm font-bold text-blue-600 hover:underline">
                     <i class="fa-solid fa-download"></i> Baixar Planilha Modelo
                 </a>
             </div>
 
             <form method="POST" enctype="multipart/form-data" class="space-y-6">
                 <input type="hidden" name="tab" value="<?php echo $activeTab; ?>">
-                <div class="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:border-blue-500 transition-colors group cursor-pointer" onclick="document.getElementById('fileInput').click()">
-                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400 group-hover:text-blue-500 mb-4 transition-colors"></i>
-                    <p class="text-gray-600 font-medium">Clique para selecionar ou arraste o arquivo CSV</p>
-                    <p class="text-xs text-gray-400 mt-2">Tamanho máximo: 5MB</p>
-                    <input type="file" id="fileInput" name="file" accept=".csv" class="hidden" onchange="this.form.submit()">
+                <div data-import-dropzone
+                    class="cursor-pointer rounded-xl border-2 border-dashed border-gray-300 p-6 text-center transition-colors hover:border-blue-500 group sm:p-8 lg:p-10">
+                    <i
+                        class="fa-solid fa-cloud-arrow-up mb-4 text-4xl text-gray-400 transition-colors group-hover:text-blue-500"></i>
+                    <p class="font-medium text-gray-600">Clique para selecionar ou arraste o arquivo CSV</p>
+                    <p class="mt-2 text-xs text-gray-400">Tamanho mÃ¡ximo: 5MB</p>
+                    <input data-import-file-input type="file" id="fileInput" name="file" accept=".csv" class="hidden">
                 </div>
 
                 <div class="flex justify-center">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold shadow-lg shadow-blue-100 transition-all">
+                    <button type="submit"
+                        class="w-full rounded-lg bg-blue-600 px-8 py-3 font-bold text-white shadow-lg shadow-blue-100 transition-all hover:bg-blue-700 sm:w-auto">
                         Processar Arquivo
                     </button>
                 </div>

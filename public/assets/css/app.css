@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --brand-50: #effcf3;
+    --brand-100: #d8f6e1;
+    --brand-500: #169c54;
+    --brand-600: #118449;
+    --brand-700: #0e6d3d;
+    --brand-shadow: rgba(17, 132, 73, 0.2);
+}
+
+body {
+    font-family: 'Manrope', sans-serif;
+}
+
+.mobile-sidebar-scroll {
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+}
+
+.bg-blue-50 {
+    background-color: var(--brand-50) !important;
+}
+
+.bg-blue-100 {
+    background-color: var(--brand-100) !important;
+}
+
+.bg-blue-600 {
+    background-color: var(--brand-600) !important;
+}
+
+.bg-blue-700 {
+    background-color: var(--brand-700) !important;
+}
+
+.text-blue-100 {
+    color: #d7f7e1 !important;
+}
+
+.text-blue-400,
+.text-blue-500,
+.text-blue-600,
+.text-blue-700,
+.text-blue-800 {
+    color: var(--brand-600) !important;
+}
+
+.border-blue-100 {
+    border-color: var(--brand-100) !important;
+}
+
+.border-blue-700 {
+    border-color: var(--brand-700) !important;
+}
+
+.hover\:bg-blue-50:hover {
+    background-color: var(--brand-50) !important;
+}
+
+.hover\:bg-blue-500:hover,
+.hover\:bg-blue-600:hover,
+.hover\:bg-blue-700:hover {
+    background-color: var(--brand-700) !important;
+}
+
+.hover\:text-blue-500:hover,
+.hover\:text-blue-600:hover {
+    color: var(--brand-600) !important;
+}
+
+.focus\:ring-blue-500:focus,
+.focus\:border-blue-500:focus {
+    --tw-ring-color: rgba(22, 156, 84, 0.35) !important;
+    border-color: var(--brand-500) !important;
+}
+
+.shadow-blue-100,
+.shadow-blue-200 {
+    --tw-shadow-color: var(--brand-shadow) !important;
+}
+
+@media (max-width: 1023px) {
+    .mobile-table-cards thead {
+        display: none;
+    }
+
+    .mobile-table-cards tbody,
+    .mobile-table-cards tr,
+    .mobile-table-cards td {
+        display: block;
+        width: 100%;
+    }
+
+    .mobile-table-cards tbody {
+        padding: 0.75rem;
+    }
+
+    .mobile-table-cards tr {
+        margin-bottom: 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 1rem;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .mobile-table-cards tr:last-child {
+        margin-bottom: 0;
+    }
+
+    .mobile-table-cards td {
+        padding: 0.85rem 1rem;
+        text-align: left !important;
+        border: 0;
+    }
+
+    .mobile-table-cards td + td {
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .mobile-table-cards td[data-label]::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 0.35rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #6b7280;
+    }
+}

@@ -1,12 +1,11 @@
 <?php
-$host = $_ENV['DB_HOST'] ?? 'localhost';
-$db = $_ENV['DB_NAME'] ?? 'gestao_frota';
-$user = $_ENV['DB_USER'] ?? 'root';
-$pass = $_ENV['DB_PASSWORD'] ?? '';
+$host = '10.1.1.7';
+$db = 'gestao_frota';
+$user = 'DEV';
+$pass = '#Dev@1308&COOPERANTE';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-// resto do código...
 $options = [
      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
      PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

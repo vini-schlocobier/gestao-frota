@@ -16,6 +16,15 @@ function isAdmin() {
     return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 }
 
+function requireAdmin() {
+    requireLogin();
+
+    if (!isAdmin()) {
+        http_response_code(403);
+        exit('Acesso negado.');
+    }
+}
+
 function login($username, $password, $pdo) {
     $stmt = $pdo->prepare('SELECT * FROM users WHERE username = ?');
     $stmt->execute([$username]);

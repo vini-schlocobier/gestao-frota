@@ -4,6 +4,8 @@ require_once '../includes/auth.php';
 requireLogin();
 
 $pageTitle = 'Dashboard';
+$useChartJs = true;
+$pageScripts = ['assets/js/dashboard.js'];
 
 // Statistics
 $totalVehicles = $pdo->query("SELECT COUNT(*) FROM vehicles")->fetchColumn();
@@ -23,7 +25,6 @@ include '../includes/header.php';
 ?>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <!-- Stat Card 1 -->
     <div class="bg-white p-6 rounded-xl border shadow-sm">
         <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
@@ -35,7 +36,6 @@ include '../includes/header.php';
         <p class="text-3xl font-bold text-gray-800"><?php echo $totalVehicles; ?></p>
     </div>
 
-    <!-- Stat Card 2 -->
     <div class="bg-white p-6 rounded-xl border shadow-sm">
         <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center">
@@ -47,7 +47,6 @@ include '../includes/header.php';
         <p class="text-3xl font-bold text-gray-800">R$ <?php echo number_format($totalCosts, 2, ',', '.'); ?></p>
     </div>
 
-    <!-- Stat Card 3 -->
     <div class="bg-white p-6 rounded-xl border shadow-sm">
         <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center">
@@ -58,7 +57,6 @@ include '../includes/header.php';
         <p class="text-3xl font-bold text-gray-800"><?php echo number_format($avgTank, 1, ',', '.'); ?> L</p>
     </div>
 
-    <!-- Stat Card 4 -->
     <div class="bg-white p-6 rounded-xl border shadow-sm">
         <div class="flex items-center justify-between mb-4">
             <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center">
@@ -72,13 +70,13 @@ include '../includes/header.php';
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- Chart Section -->
     <div class="lg:col-span-2 bg-white p-6 rounded-xl border shadow-sm">
         <h3 class="text-lg font-bold text-gray-800 mb-6">Distribuição de Custos por Modelo</h3>
-        <canvas id="costsChart" height="150"></canvas>
+        <canvas id="costsChart" height="150"
+            data-labels='<?php echo htmlspecialchars($chartLabels, ENT_QUOTES, 'UTF-8'); ?>'
+            data-values='<?php echo htmlspecialchars($chartData, ENT_QUOTES, 'UTF-8'); ?>'></canvas>
     </div>
 
-    <!-- Alerts Section -->
     <div class="bg-white p-6 rounded-xl border shadow-sm">
         <h3 class="text-lg font-bold text-gray-800 mb-6">Alertas Críticos</h3>
         <div class="space-y-4">
@@ -88,7 +86,8 @@ include '../includes/header.php';
                     <div>
                         <p class="text-sm font-bold text-red-800"><?php echo $noDriver; ?> Veículos sem motorista</p>
                         <p class="text-xs text-red-600">É necessário atribuir um responsável.</p>
-                        <a href="vehicles.php?search=sem+motorista" class="text-xs font-bold text-red-700 underline mt-1 block">Ver veículos</a>
+                        <a href="vehicles.php?search=sem+motorista"
+                            class="text-xs font-bold text-red-700 underline mt-1 block">Ver veículos</a>
                     </div>
                 </div>
             <?php endif; ?>
@@ -99,14 +98,16 @@ include '../includes/header.php';
                     <div>
                         <p class="text-sm font-bold text-orange-800"><?php echo $noOdometer; ?> Hodômetros zerados</p>
                         <p class="text-xs text-orange-600">Veículos precisam de atualização de KM.</p>
-                        <a href="vehicles.php" class="text-xs font-bold text-orange-700 underline mt-1 block">Atualizar agora</a>
+                        <a href="vehicles.php" class="text-xs font-bold text-orange-700 underline mt-1 block">Atualizar
+                            agora</a>
                     </div>
                 </div>
             <?php endif; ?>
 
             <?php if ($noDriver == 0 && $noOdometer == 0): ?>
                 <div class="text-center py-10">
-                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div
+                        class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fa-solid fa-check text-2xl"></i>
                     </div>
                     <p class="text-gray-500">Tudo em dia!</p>
@@ -115,32 +116,5 @@ include '../includes/header.php';
         </div>
     </div>
 </div>
-
-<script>
-    const ctx = document.getElementById('costsChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: <?php echo $chartLabels; ?>,
-            datasets: [{
-                label: 'Custo Total (R$)',
-                data: <?php echo $chartData; ?>,
-                backgroundColor: 'rgba(37, 99, 235, 0.6)',
-                borderColor: 'rgb(37, 99, 235)',
-                borderWidth: 1,
-                borderRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true }
-            },
-            plugins: {
-                legend: { display: false }
-            }
-        }
-    });
-</script>
 
 <?php include '../includes/footer.php'; ?>
