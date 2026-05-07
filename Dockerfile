@@ -1,13 +1,14 @@
-FROM php:8.2-apache
+FROM php:8.2-fpm
 
 RUN docker-php-ext-install pdo pdo_mysql
-RUN rm -f /etc/apache2/mods-enabled/mpm_* && a2enmod mpm_prefork
-RUN a2enmod rewrite
+
+RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
 
 COPY . /var/www/html
+COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN sed -ri -e 's!DocumentRoot /var/www/html!DocumentRoot /var/www/html/public!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri -e 's!<Directory /var/www/html>!<Directory /var/www/html/public>!g' /etc/apache2/sites-available/*.conf \
-    && chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
-WORKDIR /var/www/html
+EXPOSE 8080
+
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
